@@ -7,7 +7,21 @@ const up = async (knex) => {
     table.increments("id");
     table.string("user").notNullable().unique();
     table.string("email").notNullable().unique();
-    table.string("pwd").notNullable().unique();
+    table.string("pwdHash").notNullable().unique();
+    table.timestamp(true, true);
+  });
+  await knex.schema.createTable("signUp", (table) => {
+    table.increments("id");
+    table.string("username").notNullable().unique();
+    table.string("email").notNullable().unique();
+    table.string("pwdHash").notNullable().unique();
+    table.timestamp(true, true);
+  });
+  await knex.schema.createTable("signIn", (table) => {
+    table.increments("id");
+    table.string("username").notNullable().unique();
+    table.string("email").notNullable().unique();
+    table.string("pwdHash").notNullable().unique();
     table.timestamp(true, true);
   });
   await knex.schema.createTable("books", (table) => {
@@ -94,6 +108,8 @@ const down = async (knex) => {
   await knex.schema.dropTableIfExists("photos");
   await knex.schema.dropTableIfExists("themes");
   await knex.schema.dropTableIfExists("books");
+  await knex.schema.dropTableIfExists("signIn");
+  await knex.schema.dropTableIfExists("signUp");
   await knex.schema.dropTableIfExists("users");
 };
 

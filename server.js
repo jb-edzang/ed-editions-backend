@@ -28,6 +28,8 @@ app.get("/users", async (req, res) => {
 });
 
 app.use("/users", require("./routes/usersRoute"));
+app.use("/signUp", require("./routes/signUpRoute"));
+app.use("/signIn", require("./routes/signInRoute"));
 app.use("/books", require("./routes/bookRoute"));
 app.use("/book", require("./routes/api/book"));
 app.use("/api/photos", require("./routes/photosRoute"));
@@ -38,5 +40,5 @@ app.use("/api", require("./routes/api/user"));
 const PORT = process.env.PORT || 3030;
 
 app.listen(PORT, () => {
-  console.log(`Port running on port : ${PORT}`);
+  console.log(`Server running on port : ${PORT}`);
 });
