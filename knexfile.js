@@ -7,8 +7,8 @@ module.exports = {
     client: "pg",
     connection: {
       database: process.env.DB_NAME,
-      user: process.env.DB_USER || "username",
-      password: process.env.DATABASE_URI || "pwd",
+      user: process.env.DB_USER,
+      password: process.env.DATABASE_URI,
     },
     useNullAsDefault: true,
     migrations: {

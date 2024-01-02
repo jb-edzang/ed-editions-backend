@@ -25,9 +25,14 @@ const up = async (knex) => {
     table.timestamp(true, true);
   });
   await knex.schema.createTable("books", (table) => {
-    table.increments("id");
+    table.increments("id").primary();
     table.string("title").notNullable().unique();
-    table.integer("user_id").unsigned().references("id").inTable("users");
+    table
+      .integer("user_id")
+      .unsigned()
+      .notNullable()
+      .references("id")
+      .inTable("users");
     table.text("description").notNullable();
     table.date("publication_date").notNullable().unique();
   });
