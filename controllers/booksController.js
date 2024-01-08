@@ -11,7 +11,13 @@ const getAllBooks = async (req, res) => {
 
 const createBook = async (req, res) => {
   try {
-    const newBook = await knex("books").insert(req.body);
+    const { title, description, publication_date, user_id } = req.body;
+    const newBook = await knex("books").insert({
+      title,
+      description,
+      publication_date,
+      user_id,
+    });
     res.json(newBook);
   } catch (error) {
     res.status(500).json({ error: "Failed to create a new book" });

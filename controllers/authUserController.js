@@ -3,7 +3,14 @@ const jwt = require("jsonwebtoken");
 const knex = require("../knexfile");
 
 const authUser = async (req, res) => {
+  const cookies = req.cookies;
+  console.log(`cookie : ${JSON.stringify(cookies)}`);
+
   const { email, password } = req.body;
+  if (!email || !password)
+    return res
+      .status(400)
+      .json({ message: "username and password are required" });
 
   try {
     const user = await knex("users").where({ email }).first();

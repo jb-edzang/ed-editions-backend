@@ -8,13 +8,18 @@ const knex = require("knex");
 const { Model } = require("objection");
 
 const knexConfig = require("./knexfile");
-const { reqLogger } = require("./middlewares/logger");
+const { logger } = require("./middlewares/logger");
+const corsOptions = require("./config/corsOptions");
+const cookieParser = require("cookie-parser");
 const dbConn = knex(knexConfig.development);
 
 Model.knex(dbConn);
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(logger);
 
 app.get("/users", async (req, res) => {
   try {
@@ -27,11 +32,13 @@ app.get("/users", async (req, res) => {
   }
 });
 
+app.use("/", express.static(path.join(__dirname, "/public")));
+
 app.use("/users", require("./routes/usersRoute"));
 app.use("/signUp", require("./routes/signUpRoute"));
 app.use("/signIn", require("./routes/signInRoute"));
 app.use("/books", require("./routes/bookRoute"));
-app.use("/book", require("./routes/api/book"));
+app.use("/book", require("./routes/api/books"));
 app.use("/api/photos", require("./routes/photosRoute"));
 app.use("/api/comments", require("./routes/commentRoute"));
 app.use("/api/auth", require("./routes/authUserRoute"));

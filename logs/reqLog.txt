@@ -12,3 +12,10 @@
 20240101	19:32:51	8c66af91-f66d-4e58-a3f3-6c39ccb7dd2a	POST	undefined	/
 20240102	01:25:20	c1217e23-74de-4e88-afb7-702da955846c	POST	undefined	/
 20240102	01:47:54	32f4d382-49e5-45ae-a943-de898f0b16c3	GET	undefined	/
+20240105	21:57:11	3e601774-4c84-42e3-a88e-f8776c57e884	POST	http://localhost:3000	/
+20240105	22:05:55	ec038fdc-fb3d-4f0d-82fd-e361d206cdfe	POST	http://localhost:3000	/
+20240105	22:11:14	2490fa5f-1022-4f29-aafc-b7921522dcfa	POST	http://localhost:3000	/
+20240105	22:15:07	13cca1ee-7145-49f7-8517-8b96c9406b51	POST	http://localhost:3000	/
+20240105	22:31:01	8657f9f6-bf57-4dcb-9d34-2f6b55e50e82	POST	http://localhost:3000	/
+20240108	13:36:52	dd7c502a-6cf3-4333-aceb-4c2bea970205	POST	undefined	/api/books
+20240108	13:39:01	ddf5561d-b493-4fc1-ad52-859fd01012e8	POST	undefined	/api/books
