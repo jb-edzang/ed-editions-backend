@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const knex = require("../knexfile");
+const User = require("../models/User"); // Importez le modèle User
 
 const authUser = async (req, res) => {
   const cookies = req.cookies;
@@ -13,7 +13,7 @@ const authUser = async (req, res) => {
       .json({ message: "username and password are required" });
 
   try {
-    const user = await knex("users").where({ email }).first();
+    const user = await User.query().findOne({ email }); // Utilisation du modèle User pour accéder à la base de données
 
     if (!user) {
       return res.status(401).json({ error: "Email ou mot de passe incorrect" });
@@ -30,7 +30,7 @@ const authUser = async (req, res) => {
       { id: user.id },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "10s", // laisser à 1h
+        expiresIn: "1h",
       }
     );
 
@@ -39,7 +39,7 @@ const authUser = async (req, res) => {
       { id: user.id },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: "15s", // laisser ) 7d
+        expiresIn: "7d",
       }
     );
 

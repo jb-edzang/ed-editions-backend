@@ -1,8 +1,8 @@
-const knex = require("../knexfile");
+const Tag = require("../models/Tag"); // Importez le modèle Tag
 
 const getAllTags = async (req, res) => {
   try {
-    const tags = await knex("tags").select("*");
+    const tags = await Tag.query(); // Utilisation du modèle Tag pour accéder à la base de données
     res.json(tags);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve tags" });
@@ -12,7 +12,7 @@ const getAllTags = async (req, res) => {
 const getTagById = async (req, res) => {
   const { id } = req.params;
   try {
-    const tag = await knex("tags").where({ id }).first();
+    const tag = await Tag.query().findById(id); // Utilisation du modèle Tag pour accéder à la base de données
     if (!tag) {
       return res.status(404).json({ error: "Tag not found" });
     }
@@ -24,7 +24,7 @@ const getTagById = async (req, res) => {
 
 const createTag = async (req, res) => {
   try {
-    const newTag = await knex("tags").insert(req.body);
+    const newTag = await Tag.query().insert(req.body); // Utilisation du modèle Tag pour accéder à la base de données
     res.json(newTag);
   } catch (error) {
     res.status(500).json({ error: "Failed to create a new tag" });
@@ -34,7 +34,7 @@ const createTag = async (req, res) => {
 const updateTag = async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedTag = await knex("tags").where({ id }).update(req.body);
+    const updatedTag = await Tag.query().patchAndFetchById(id, req.body); // Utilisation du modèle Tag pour accéder à la base de données
     res.json(updatedTag);
   } catch (error) {
     res.status(500).json({ error: "Failed to update the tag" });
@@ -44,7 +44,7 @@ const updateTag = async (req, res) => {
 const deleteTag = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedTag = await knex("tags").where({ id }).del();
+    const deletedTag = await Tag.query().deleteById(id); // Utilisation du modèle Tag pour accéder à la base de données
     res.json(deletedTag);
   } catch (error) {
     res.status(500).json({ error: "Failed to delete the tag" });

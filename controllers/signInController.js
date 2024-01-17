@@ -1,14 +1,14 @@
 const bcrypt = require("bcrypt");
-const knex = require("../knexfile");
+const User = require("../models/User"); // Importez le modèle User
 
 const signInController = async (req, res) => {
   const { user, pwd } = req.body;
 
   try {
-    const userExists = await knex("users").where({ user }).first();
+    const userExists = await User.query().findOne({ username: user }); // Utilisation du modèle User pour accéder à la base de données
 
     if (userExists) {
-      const passwordMatch = await bcrypt.compare(pwd, userExists.pwdHash);
+      const passwordMatch = await bcrypt.compare(pwd, userExists.password);
 
       if (passwordMatch) {
         res.status(200).json({ message: "Authentication successful" });

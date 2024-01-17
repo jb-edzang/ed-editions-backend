@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const knex = require("../knexfile");
+const User = require("../models/User"); // Importez le modèle User
 
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
@@ -8,27 +8,31 @@ const createUser = async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10); // Hash du mot de passe
 
-    const newUser = await knex("users").insert({
+    // Création d'un nouvel utilisateur via le modèle User
+    const newUser = await User.query().insert({
       username,
       email,
       password: hashedPassword,
     });
 
+    // Récupération de l'ID du nouvel utilisateur inséré dans la base de données
+    const userId = newUser.id;
+
     // Création du token d'accès
     const accessToken = jwt.sign(
-      { id: newUser[0] },
+      { id: userId },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "10s", // laisser à 1h
+        expiresIn: "1h", // Changement à 1 heure
       }
     );
 
     // Création du refreshToken
     const refreshToken = jwt.sign(
-      { id: newUser[0] },
+      { id: userId },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: "15s", // l'initialiser à 7d
+        expiresIn: "7d", // Changement à 7 jours
       }
     );
 

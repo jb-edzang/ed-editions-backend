@@ -1,0 +1,2 @@
+- [ ] connexion du serveur au port
+- [ ] connexion des routes et controller à la base des données 

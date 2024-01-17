@@ -1,15 +1,35 @@
 const express = require("express");
 const router = express.Router();
 const photosController = require("../controllers/photosController");
-const { logger } = require("../middlewares/logger");
 
 router
   .route("/")
-  .get(logger, photosController.getAllPhotos)
-  .post(logger, photosController.createPhoto)
-  .put(logger, photosController.updatePhoto)
-  .delete(logger, photosController.deletePhoto);
+  .get((req, res) => {
+    photosController.getAllPhotos(req, res);
+  })
+  .post((req, res) => {
+    photosController.createPhoto(req, res);
+  })
+  .put((req, res) => {
+    photosController.updatePhoto(req, res);
+  })
+  .delete((req, res) => {
+    photosController.deletePhoto(req, res);
+  });
 
-// Ajoutez ici les routes pour d'autres méthodes liées aux photos...
+router
+  .route("/:id")
+  .get((req, res) => {
+    photosController.getPhotoById(req, res);
+  })
+  .put((req, res) => {
+    photosController.updatePhoto(req, res);
+  })
+  .patch((req, res) => {
+    photosController.patchPhoto(req, res);
+  })
+  .delete((req, res) => {
+    photosController.deletePhoto(req, res);
+  });
 
 module.exports = router;

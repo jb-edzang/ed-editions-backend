@@ -1,18 +1,34 @@
-const knex = require("../knexfile");
+const Book = require("../models/Book"); // Import du modèle Book
 
 const getAllBooks = async (req, res) => {
   try {
-    const books = await knex("books").select("*");
+    const books = await Book.query(); // Utilisation du modèle Book pour récupérer tous les livres
+    if (!books || books.length === 0) {
+      return res.status(204).json({ message: "No books found" });
+    }
     res.json(books);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve books" });
   }
 };
 
+const getBook = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const book = await Book.query().findById(id);
+    if (!book) {
+      return res.status(204).json({ message: `Book ID ${id} not found` });
+    }
+    res.json(book);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve the book" });
+  }
+};
+
 const createBook = async (req, res) => {
   try {
     const { title, description, publication_date, user_id } = req.body;
-    const newBook = await knex("books").insert({
+    const newBook = await Book.query().insert({
       title,
       description,
       publication_date,
@@ -24,19 +40,10 @@ const createBook = async (req, res) => {
   }
 };
 
-const postBook = async (req, res) => {
-  try {
-    const newBook = await knex("books").insert(req.body);
-    res.json(newBook);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create a new book" });
-  }
-};
-
 const updateBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedBook = await knex("books").where({ id }).update(req.body);
+    const updatedBook = await Book.query().patchAndFetchById(id, req.body);
     res.json(updatedBook);
   } catch (error) {
     res.status(500).json({ error: "Failed to update the book" });
@@ -46,7 +53,7 @@ const updateBook = async (req, res) => {
 const patchBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const patchedBook = await knex("books").where({ id }).update(req.body);
+    const patchedBook = await Book.query().patchAndFetchById(id, req.body);
     res.json(patchedBook);
   } catch (error) {
     res.status(500).json({ error: "Failed to patch the book" });
@@ -56,7 +63,10 @@ const patchBook = async (req, res) => {
 const deleteBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedBook = await knex("books").where({ id }).del();
+    const deletedBook = await Book.query().deleteById(id);
+    if (deletedBook === 0) {
+      return res.status(204).json({ message: `Book ID ${id} not found` });
+    }
     res.json(deletedBook);
   } catch (error) {
     res.status(500).json({ error: "Failed to delete the book" });
@@ -65,8 +75,8 @@ const deleteBook = async (req, res) => {
 
 module.exports = {
   getAllBooks,
+  getBook,
   createBook,
-  postBook,
   updateBook,
   patchBook,
   deleteBook,

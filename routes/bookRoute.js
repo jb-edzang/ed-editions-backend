@@ -1,18 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const booksController = require("../controllers/booksController");
-const { logger } = require("../middlewares/logger");
 
 router
   .route("/")
-  .get(logger, booksController.getAllBooks)
-  .post(logger, booksController.createBook);
+  .get((req, res) => {
+    booksController.getAllBooks(req, res);
+  })
+  .post((req, res) => {
+    booksController.createBook(req, res);
+  });
 
 router
   .route("/:id")
-  //.get(logger, booksController.getBookById)
-  .put(logger, booksController.updateBook)
-  .patch(logger, booksController.patchBook)
-  .delete(logger, booksController.deleteBook);
+  .get((req, res) => {
+    booksController.getBook(req, res);
+  })
+  .put((req, res) => {
+    booksController.updateBook(req, res);
+  })
+  .patch((req, res) => {
+    booksController.patchBook(req, res);
+  })
+  .delete((req, res) => {
+    booksController.deleteBook(req, res);
+  });
 
 module.exports = router;

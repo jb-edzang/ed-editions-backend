@@ -1,8 +1,8 @@
-const knex = require("../knexfile");
+const Theme = require("../models/Theme"); // Importez le modèle Theme
 
 const getAllThemes = async (req, res) => {
   try {
-    const themes = await knex("themes").select("*");
+    const themes = await Theme.query(); // Utilisation du modèle Theme pour accéder à la base de données
     res.json(themes);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve themes" });
@@ -12,7 +12,7 @@ const getAllThemes = async (req, res) => {
 const getThemeById = async (req, res) => {
   const { id } = req.params;
   try {
-    const theme = await knex("themes").where({ id }).first();
+    const theme = await Theme.query().findById(id); // Utilisation du modèle Theme pour accéder à la base de données
     if (!theme) {
       return res.status(404).json({ error: "Theme not found" });
     }
@@ -25,7 +25,7 @@ const getThemeById = async (req, res) => {
 const createTheme = async (req, res) => {
   const { name } = req.body;
   try {
-    const newTheme = await knex("themes").insert({ name });
+    const newTheme = await Theme.query().insert({ name }); // Utilisation du modèle Theme pour accéder à la base de données
     res.json(newTheme);
   } catch (error) {
     res.status(500).json({ error: "Failed to create a new theme" });
@@ -36,7 +36,7 @@ const updateTheme = async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
   try {
-    const updatedTheme = await knex("themes").where({ id }).update({ name });
+    const updatedTheme = await Theme.query().patchAndFetchById(id, { name }); // Utilisation du modèle Theme pour accéder à la base de données
     res.json(updatedTheme);
   } catch (error) {
     res.status(500).json({ error: "Failed to update the theme" });
@@ -46,7 +46,7 @@ const updateTheme = async (req, res) => {
 const deleteTheme = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedTheme = await knex("themes").where({ id }).del();
+    const deletedTheme = await Theme.query().deleteById(id); // Utilisation du modèle Theme pour accéder à la base de données
     res.json(deletedTheme);
   } catch (error) {
     res.status(500).json({ error: "Failed to delete the theme" });

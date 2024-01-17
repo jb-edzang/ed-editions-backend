@@ -1,51 +1,74 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const cors = require("cors");
 const path = require("path");
-
 const knex = require("knex");
-const { Model } = require("objection");
+
+const apiRoutes = require("./middlewares/apiRoutes");
+
+const cors = require("cors");
+const allowedOrigins = require("./config/allowedOrigins");
 
 const knexConfig = require("./knexfile");
-const { logger } = require("./middlewares/logger");
-const corsOptions = require("./config/corsOptions");
-const cookieParser = require("cookie-parser");
 const dbConn = knex(knexConfig.development);
 
+const { Model } = require("objection");
 Model.knex(dbConn);
 
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const { logger } = require("./middlewares/logger");
+const corsOptions = require("./middlewares/corsOptions");
+const cookieParser = require("cookie-parser");
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(logger);
-
-app.get("/users", async (req, res) => {
-  try {
-    const users = await dbConn.select().from("users");
-    res.json(users);
-    console.log("conneted to empreintes DB");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/", express.static(path.join(__dirname, "/public")));
 
+// Pour les routes
+app.use("/auth", require("./routes/authUserRoute"));
+app.use("/book", require("./routes/bookRoute"));
+app.use("/comment", require("./routes/commentRoute"));
+app.use("/likes", require("./routes/likesRoute"));
+app.use("/photos", require("./routes/photosRoute"));
+app.use("/signin", require("./routes/signInRoute"));
+app.use("/signup", require("./routes/signUpRoute"));
+app.use("/tags", require("./routes/tagsRoute"));
+app.use("/theme", require("./routes/themeRoute"));
 app.use("/users", require("./routes/usersRoute"));
-app.use("/signUp", require("./routes/signUpRoute"));
-app.use("/signIn", require("./routes/signInRoute"));
-app.use("/books", require("./routes/bookRoute"));
-app.use("/book", require("./routes/api/books"));
-app.use("/api/photos", require("./routes/photosRoute"));
-app.use("/api/comments", require("./routes/commentRoute"));
-app.use("/api/auth", require("./routes/authUserRoute"));
-app.use("/api", require("./routes/api/user"));
+
+// Pour les routes API
+app.use("/api", apiRoutes);
+
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts("html")) {
+    res.sendFile(path.join(__dirname, "views", "404.html"));
+  } else if (req.accepts("json")) {
+    res.json({ error: "404 Not Found" });
+  } else {
+    res.type("txt").send("404 Not Found");
+  }
+});
 
 const PORT = process.env.PORT || 3030;
 
 app.listen(PORT, () => {
   console.log(`Server running on port : ${PORT}`);
+
+  dbConn
+    .raw("SELECT 1+1 as result")
+    .then(() => {
+      console.log("Server is connected to Empreintes DB !");
+    })
+    .catch((err) => {
+      console.error("Connection to Empreintes failed:", err);
+    });
 });

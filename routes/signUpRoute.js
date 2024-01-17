@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const signUpController = require("../controllers/signUpController");
-const { logger } = require("../middlewares/logger");
 
-// Route pour l'inscription (signUp)
-router.post(logger, signUpController);
+router.post("/", (req, res) => {
+  signUpController.createUser(req, res);
+});
 
 module.exports = router;

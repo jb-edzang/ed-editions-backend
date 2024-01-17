@@ -6,9 +6,9 @@ module.exports = {
   development: {
     client: "pg",
     connection: {
-      database: process.env.DB_NAME,
-      user: process.env.DB_USER,
-      password: process.env.DATABASE_URI,
+      database: process.env.DATABASE_NAME,
+      user: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
     },
     useNullAsDefault: true,
     migrations: {

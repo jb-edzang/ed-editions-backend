@@ -1,4 +1,5 @@
 const { Model } = require("objection");
+//const { knex } = require("../config/dbConn");
 
 class User extends Model {
   static get tableName() {

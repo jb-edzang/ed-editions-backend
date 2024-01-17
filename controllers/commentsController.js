@@ -1,8 +1,8 @@
-const knex = require("../knexfile");
+const Comment = require("../models/Comment"); // Importez le modèle Comment
 
 const getAllComments = async (req, res) => {
   try {
-    const comments = await knex("comments").select("*");
+    const comments = await Comment.query().select(); // Utilisation du modèle Comment pour accéder à la base de données
     res.json(comments);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve comments" });
@@ -11,7 +11,7 @@ const getAllComments = async (req, res) => {
 
 const createComment = async (req, res) => {
   try {
-    const newComment = await knex("comments").insert(req.body);
+    const newComment = await Comment.query().insert(req.body); // Utilisation du modèle Comment pour accéder à la base de données
     res.json(newComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to create a new comment" });
@@ -21,9 +21,7 @@ const createComment = async (req, res) => {
 const updateComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedComment = await knex("comments")
-      .where({ id })
-      .update(req.body);
+    const updatedComment = await Comment.query().findById(id).patch(req.body); // Utilisation du modèle Comment pour accéder à la base de données
     res.json(updatedComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to update the comment" });
@@ -33,7 +31,7 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedComment = await knex("comments").where({ id }).del();
+    const deletedComment = await Comment.query().deleteById(id); // Utilisation du modèle Comment pour accéder à la base de données
     res.json(deletedComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to delete the comment" });
