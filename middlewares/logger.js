@@ -18,7 +18,8 @@ const reqLogger = async (message, logName) => {
       logItem
     );
   } catch (err) {
-    console.log(err);
+    // Log the error, including the location where it occurred
+    console.error(`Error in reqLogger: ${err.message}`);
   }
 };
 

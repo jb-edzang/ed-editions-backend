@@ -1,4 +1,4 @@
-const Book = require("../models/Book"); // Import du modèle Book
+const Book = require("../models/Book");
 
 const getAllBooks = async (req, res) => {
   try {
@@ -34,8 +34,10 @@ const createBook = async (req, res) => {
       publication_date,
       user_id,
     });
+    console.log("Result after insertion");
     res.json(newBook);
   } catch (error) {
+    console.error("Failed to create a new book", error);
     res.status(500).json({ error: "Failed to create a new book" });
   }
 };
@@ -43,7 +45,7 @@ const createBook = async (req, res) => {
 const updateBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedBook = await Book.query().patchAndFetchById(id, req.body);
+    const updatedBook = await Book.query().patchById(id, req.body);
     res.json(updatedBook);
   } catch (error) {
     res.status(500).json({ error: "Failed to update the book" });
@@ -53,7 +55,7 @@ const updateBook = async (req, res) => {
 const patchBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const patchedBook = await Book.query().patchAndFetchById(id, req.body);
+    const patchedBook = await Book.query().patchById(id, req.body);
     res.json(patchedBook);
   } catch (error) {
     res.status(500).json({ error: "Failed to patch the book" });

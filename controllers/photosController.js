@@ -16,7 +16,8 @@ const getPhotoById = async (req, res) => {
     const photo = await Photo.query().findById(id);
 
     if (photo) {
-      res.json(photo);
+      res.writeHead(200, { "Content-Type": "image/jpeg" });
+      res.end(photo.image_data, "binary");
     } else {
       res.status(404).json({ error: "Photo not found" });
     }

@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User"); // Importez le modèle User
+const User = require("../models/User");
 
 const signInController = async (req, res) => {
   const { user, pwd } = req.body;

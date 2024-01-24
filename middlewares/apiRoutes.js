@@ -4,7 +4,7 @@ const usersApiRoute = require("../routes/api/users");
 
 // Importez toutes les routes nécessaires
 const authUserRoute = require("../routes/authUserRoute");
-const bookRoute = require("../routes/bookRoute");
+const booksRoute = require("../routes/booksRoute");
 const commentRoute = require("../routes/commentRoute");
 const photosRoute = require("../routes/photosRoute");
 const usersRoute = require("../routes/usersRoute");
@@ -16,7 +16,7 @@ const likesRoute = require("../routes/likesRoute");
 
 // Associez les routes à leurs chemins respectifs
 router.use("/auth", authUserRoute);
-router.use("/books", bookRoute);
+router.use("/books", booksRoute);
 router.use("/comment", commentRoute);
 router.use("/photo", photosRoute);
 router.use("/users", usersRoute);
