@@ -1,20 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const commentsController = require("../controllers/commentsController");
+const { logger } = require("../middlewares/logger");
 
 router
   .route("/")
-  .get((req, res) => {
-    commentsController.getAllComments(req, res);
-  })
-  .post((req, res) => {
-    commentsController.createComment(req, res);
-  })
-  .put((req, res) => {
-    commentsController.updateComment(req, res);
-  })
-  .delete((req, res) => {
-    commentsController.deleteComment(req, res);
-  });
+  .get(logger, commentsController.getAllComments)
+  .post(logger, commentsController.createComment);
+
+router
+  .route("/:id")
+  .put(logger, commentsController.updateComment)
+  .get(logger, commentsController.getCommentById)
+  .delete(logger, commentsController.deleteComment);
 
 module.exports = router;

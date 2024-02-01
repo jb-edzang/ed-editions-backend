@@ -18,7 +18,7 @@ const likesRoute = require("../routes/likesRoute");
 router.use("/auth", authUserRoute);
 router.use("/books", booksRoute);
 router.use("/comment", commentRoute);
-router.use("/photo", photosRoute);
+router.use("/photos", photosRoute);
 router.use("/users", usersRoute);
 router.use("/signUp", signUpRoute);
 router.use("/signIn", signInRoute);

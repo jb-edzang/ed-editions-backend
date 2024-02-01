@@ -4,24 +4,14 @@ const themeController = require("../controllers/themesController");
 const { logger } = require("../middlewares/logger");
 
 router
-  .route("/themes")
-  .get((req, res) => {
-    themeController.getAllThemes(req, res);
-  })
-  .post((req, res) => {
-    themeController.createTheme(req, res);
-  });
+  .route("/")
+  .get(logger, themeController.getAllThemes)
+  .post(logger, themeController.createTheme);
 
 router
-  .route("/themes/:id")
-  .put((req, res) => {
-    themeController.updateTheme(req, res);
-  })
-  .patch((req, res) => {
-    themeController.patchTheme(req, res);
-  })
-  .delete((req, res) => {
-    themeController.deleteTheme(req, res);
-  });
+  .route("/:id")
+  .put(logger, themeController.updateTheme)
+  .get(logger, themeController.getThemeById)
+  .delete(logger, themeController.deleteTheme);
 
 module.exports = router;

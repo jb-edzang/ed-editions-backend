@@ -1,17 +1,31 @@
-const Comment = require("../models/Comment"); // Importez le modèle Comment
+const Comment = require("../models/Comment");
 
 const getAllComments = async (req, res) => {
   try {
-    const comments = await Comment.query().select(); // Utilisation du modèle Comment pour accéder à la base de données
+    const comments = await Comment.query().select();
     res.json(comments);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve comments" });
   }
 };
 
+const getCommentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const comment = await Comment.query().findById(id);
+    if (comment) {
+      res.json(comment);
+    } else {
+      res.status(404).json({ error: "Comment not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve the comment" });
+  }
+};
+
 const createComment = async (req, res) => {
   try {
-    const newComment = await Comment.query().insert(req.body); // Utilisation du modèle Comment pour accéder à la base de données
+    const newComment = await Comment.query().insert(req.body);
     res.json(newComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to create a new comment" });
@@ -21,7 +35,7 @@ const createComment = async (req, res) => {
 const updateComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedComment = await Comment.query().findById(id).patch(req.body); // Utilisation du modèle Comment pour accéder à la base de données
+    const updatedComment = await Comment.query().findById(id).patch(req.body);
     res.json(updatedComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to update the comment" });
@@ -31,7 +45,7 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedComment = await Comment.query().deleteById(id); // Utilisation du modèle Comment pour accéder à la base de données
+    const deletedComment = await Comment.query().deleteById(id);
     res.json(deletedComment);
   } catch (error) {
     res.status(500).json({ error: "Failed to delete the comment" });
@@ -40,6 +54,7 @@ const deleteComment = async (req, res) => {
 
 module.exports = {
   getAllComments,
+  getCommentById,
   createComment,
   updateComment,
   deleteComment,

@@ -9,6 +9,24 @@ const getAllPhotos = async (req, res) => {
   }
 };
 
+const createPhoto = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const { buffer, mimetype } = req.file; // Utilisez buffer et mimetype au lieu de filename
+
+    const newPhoto = await Photo.query().insert({
+      title,
+      description,
+      image_data: buffer, // Utilisez buffer pour stocker les données de l'image
+      content_type: mimetype, // Stockez le type de contenu de l'image
+    });
+
+    res.status(201).json(newPhoto);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create a new photo" });
+  }
+};
+
 const getPhotoById = async (req, res) => {
   const { id } = req.params;
 
@@ -23,15 +41,6 @@ const getPhotoById = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve the photo" });
-  }
-};
-
-const createPhoto = async (req, res) => {
-  try {
-    const newPhoto = await Photo.query().insert(req.body);
-    res.json(newPhoto);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create a new photo" });
   }
 };
 

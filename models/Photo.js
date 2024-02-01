@@ -1,4 +1,12 @@
+const dbConn = require("../config/dbConn");
 const { Model } = require("objection");
+Model.knex(dbConn);
+
+if (process.env.NODE_ENV !== "production") {
+  dbConn.on("query", (query) => {
+    console.log(query.sql);
+  });
+}
 
 class Photo extends Model {
   static get tableName() {
